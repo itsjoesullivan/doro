@@ -3,6 +3,7 @@
 pomodoro script
 
 ```bash
+### NB not implemented
 # Default 25 minutes
 doro
 
