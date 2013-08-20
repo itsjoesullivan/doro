@@ -1,6 +1,7 @@
 var colors = require('colors'),
   baudio = require('baudio');
 program = require('commander');
+
 program
   .parse(process.argv);
 
@@ -13,7 +14,7 @@ start();
 
 function check() {
   var dur = new Date().getTime() - startTime ;
-  return (dur > 1000 * 6 * 1);
+  return (dur > 1000 * 60 * 25);
 }
 
 var interval;
