@@ -1,7 +1,7 @@
 {
   "name": "doro",
-  "version": "0.1.0",
-  "description": "ERROR: No README.md file found!",
+  "version": "0.2.0",
+  "description": "readme.md",
   "main": "index.js",
   "bin": {
     "doro": "bin/doro"
@@ -16,6 +16,7 @@
   "dependencies": {
     "commander": "~2.0.0",
     "colors": "*",
-    "baudio": "*"
+    "js-csi": "~1.0.1",
+    "dirty": "~0.9.7"
   }
 }

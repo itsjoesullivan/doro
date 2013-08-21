@@ -1,2 +1,82 @@
-#!/usr/local/bin/node
-require(__dirname + '/../index.js')
+#!/usr/bin/env node
+
+var program = require('commander'),
+  colors = require('colors'),
+  CSI = require('js-csi');
+
+
+if(process.argv[2] === 'logs') {
+  require('../lib/logs')(process.argv.slice(2));
+} else {
+
+
+  program
+    .version(require('../package.json').version)
+    .option('-d, --duration <minutes>', 'Duration, in minutes.', parseFloat)
+    .option('-m, --message <message>', 'Message')
+    .parse(process.argv);
+
+  program.duration = program.duration || 25;
+  program.message = program.message || '';
+
+
+  // Init
+  CSI.hide();
+  CSI.clear();
+  CSI.move(1);
+  process.stdout.write("doro started".red);
+
+  var ct = 0,
+    db = require('dirty')('dorolog'),
+    alertDuration = 2,
+    flashRate = 0.75,
+    bright = false;
+
+  // Flash!
+  function flash(cb) {
+    CSI.move(1,1);
+    ct++;
+    var str = ""
+    for(var i = 0; i < process.stdout.columns; i++) {
+      str += " ".inverse;
+    }
+
+    var row = 0;
+    while(row++ <= process.stdout.rows) {
+      process.stdout.write(str[bright ? "blue" : "grey"]);
+      CSI.move(row);
+    }
+    bright = !bright;
+    if(flashRate * ct > alertDuration) {
+      cb();
+    } else {
+      setTimeout(function() {
+        flash(cb);
+      }, flashRate * 1000);
+    }
+    CSI.move(1,1);
+    process.stdout.write("doro finished".green);
+  }
+
+  // Done
+  function end() {
+    db.set(new Date(), {
+      date: new Date(),
+      message: program.message,
+      duration: program.duration
+    });
+    db.on('drain', function() {
+      var ct = 0;
+      flash(function() {
+        CSI.clear();
+        CSI.move(1);
+        process.stdout.write("doro finished".green);
+        CSI.move(2);
+        process.exit();
+      });
+    });
+  }
+  db.on('load', function() {
+    setTimeout(end, program.duration * 60 * 1000);
+  });
+}
