@@ -1,5 +1,7 @@
 #doro
 
+__N.B.__ stores a log in ~/.dorolog... working on making that opt in / alternative solutions. Open to suggestions.
+
 pomodoro script
 
 ```bash

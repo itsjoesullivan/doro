@@ -27,7 +27,7 @@ if(process.argv[2] === 'logs') {
   process.stdout.write("doro started".red);
 
   var ct = 0,
-    db = require('dirty')('dorolog'),
+    db = require('dirty')('.dorolog'),
     alertDuration = 2,
     flashRate = 0.75,
     bright = false;
